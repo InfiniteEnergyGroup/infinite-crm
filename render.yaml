@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: infinite-energy-crm
+    env: node
+    plan: free
+    region: oregon
+    buildCommand: |
+      cd backend && npm install && npm run build && cd ..
+      cd frontend && npm install && npm run build && cd ..
+      rm -rf backend/client && mv frontend/build backend/client
+    startCommand: |
+      PORT=10000 node backend/dist/index.js
+    envVars:
+      - key: DB_URL
+        sync: true
+      - key: CLIENT_ID
+        sync: true
+      - key: CLIENT_SECRET
+        sync: true
+      - key: TENANT_ID
+        sync: true
+      - key: FRONTEND_URL
+        value: https://InfiniteEnergyGroup.onrender.com
